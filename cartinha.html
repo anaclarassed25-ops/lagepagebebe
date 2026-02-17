@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Feliz Aniversário!</title>
+    <style>
+        :root{
+            --primary-black: #000000;
+            --secondary-black: #3f0303;
+            --accent-red: #ff0040;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(to right, #f7b0b2, #af948d);
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-black), var(--secondary-black));
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-gif {
+            width: 450px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .cartinha {
+            background-color: rgb(238, 206, 206);
+            padding: 40px;
+            border-radius: 15px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgb(20, 14, 14);
+        }
+
+        h1 {
+            color: var(--accent-red);
+        }
+
+        p {
+            font-size: 15px;
+            color: #d63434;
+        }
+
+        .assinatura {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #e91e61;
+        }
+
+        #next {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 12px 22px;
+            font-size: 16px;
+            background: linear-gradient(45deg, var(--accent-red), #5e2030);
+            color: rgb(48, 15, 15);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            pointer-events: none;
+        }
+        #next:hover {
+            transform: scale(1.1);
+        }
+
+        /* PARTE 1 */
+        #parte1 {
+            min-height: 150vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 40px;
+        }
+
+        /* PARTE 2 */
+        #parte2 {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(to right, #962f13, #dfc0c1);
+            color: #333;
+            text-align: center;
+            flex-direction: column;
+            padding: 40px;
+        }
+
+        .surprise-btn {
+            background: linear-gradient(45deg, var(--accent-red), var(--deep-red));
+            color: var(--white);
+            border: none;
+            padding: 25px 50px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 60px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            margin: 40px 0;
+            box-shadow: 
+                0 15px 35px rgba(255, 0, 64, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            animation: btn-pulse 3s ease-in-out infinite;
+            border: 2px solid var(--neon-red);
+        }
+
+        .surprise-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .surprise-btn:hover::before {
+            left: 100%;
+        }
+
+        .surprise-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 
+                0 25px 50px rgba(255, 0, 64, 0.6),
+                0 0 30px var(--gold);
+        }
+
+        @keyframes btn-pulse {
+            0%, 100% { box-shadow: 0 15px 35px rgba(255, 0, 64, 0.4); }
+            50% { box-shadow: 0 15px 35px rgba(255, 0, 64, 0.6), 0 0 20px var(--gold); }
+        }
+
+
+
+/* Efeitos de explosão dark */
+        .heart-explosion {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 2rem;
+            animation: heart-explode 2s ease-out forwards;
+        }
+
+        @keyframes heart-explode {
+            0% { 
+                transform: scale(0) rotate(0deg); 
+                opacity: 1; 
+            }
+            50% { 
+                transform: scale(1.5) rotate(180deg); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: scale(0.5) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+
+
+        #parte2 img {
+            max-width: 100%;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 fotos por linha */
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.photo-frame {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.photo-frame:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+
+/* Efeito de explosão dark */
+.heart-explosion {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    font-size: 2rem;
+    color: #ff0040;
+    animation: heart-explode 1.5s ease-out forwards;
+}
+
+@keyframes heart-explode {
+    0% {
+        transform: scale(0) translate(0, 0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5) translate(var(--x), var(--y));
+        opacity: 0;
+    }
+}
+
+#parte3 {
+    display: none;
+    min-height: 100vh;
+    background: linear-gradient(to right, #2b0a12, #8b1e3f);
+    color: white;
+    text-align: center;
+    padding: 40px;
+    flex-direction: column;
+}
+
+.spotify-player {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+    </style>
+</head>
+
+<body>
+    <div id="parte1">
+         <img src="https://media.tenor.com/DhqhjsSjIsEAAAAm/sanrio.webp"
+       
+         alt="Loading" >
+    <div class="cartinha">
+        <h1>Hoje é o seu dia, meu bem. Feliz aniversário!!🎈🎉</h1>
+
+        <p>
+           
+            Eu fiz tudo isso com muito carinho pra você e
+            espero que tenha sentido isso em cada detalhe que coloquei aqui
+            Queria poder te dar algo de valor também, mas como eu to sem grana
+            tive que apelar pro que eu tenho meu esforço e meu coraçao rs
+
+        </p>
+
+        <p>
+            Sabe... ter te conhecido foi umas das melhores coisas que me aconteceram,
+            Você me mudou de um jeito que eu nem sabia que precisava mudar
+        </p>
+
+        <p>
+            Esse é o primeiro de muitos aniversários seus
+            que eu quero estar presente.
+           Pode ter certeza que nos próximos eu vou tentar
+           ser ainda mais criativa, porque só um feliz aniversário as 00h
+           nunca vai ser suficiente pra mim
+           Eu quero te dar sempre o melhor dos melhores
+        </p>
+       
+        <p>
+           Eu sou muito feliz por ter a oportunidade de te ver crescer,
+           evoluir, conquistar coisa... e de crescer junto com você,
+           apredendo e se amando cada vez mais.
+        </p>
+
+           <p>
+            Feliz anirvesário, seu borabill
+            Eu queria poder passar o dia inteiro com você.
+            Pena que vou tá ocupada, mas ó só  thinking em vc
+            Eu sinto sua falta sempre que a gente ta longe,
+            falta da sua risada, dos seus elogios, dos seus
+            flertes aleatórios, dos seus assuntos nerds que eu amo
+            Na real te amo te escutar.
+           </p>  
+
+           <p>
+            Você é insuportavelmente incrível
+            No fim das contas, eu acho que ganhei
+            quando você entrou na minha vida
+            Obrigada por não ter me dado um vácuo no instagram
+            e também por ter insisido em mim.
+           </p>
+        <div class="assinatura">
+            Com todo meu amor,<br>
+            Ana
+        </div>
+    </div>
+    </div>
+
+    <button id="next">Ver surpresa ➜</button>
+
+    <div id="parte2">
+
+          <img src="cake.gif" alt="Loading" >
+        <h2>Um desenho pra você, eu tentei⬇️⬇️
+             </h2>
+        <img src="unnamed.png" alt="Desenho">
+
+<h2>Álbummm de alguns momentos</h2>
+    <div class="photo-gallery">
+        <div class="photo-frame">
+            <img src="unnamed (1).png" alt="Foto 1">
+        </div>
+        <div class="photo-frame">
+            <img src="unnamed (4).jpg" alt="Foto 2">
+        </div>
+        <div class="photo-frame">
+            <img src="unnamed (3).jpg" alt="Foto 3">
+        </div>
+        <div class="photo-frame">
+            <img src="unnamed (2).jpg" alt="Foto 4">
+        </div>
+        <div class="photo-frame">
+            <img src="unnamed (1).jpg" alt="Foto 5">
+        </div>
+        <div class="photo-frame">
+            <img src="jogog.png" alt="Foto 6">
+        </div>
+    </div>
+
+ <button class="surprise-btn" onclick="showSurprise()">
+                 CLICA 
+            </button>
+
+<button onclick="irParaMusica()" class="surprise-btn">
+    🎵 
+</button>
+
+            
+    </div>
+
+    <div class="loading-overlay">
+        <img class="loading-gif" src="https://upload-os-bbs.hoyolab.com/upload/2025/12/10/163732817/6bc246cab5f4ee6045f67656beca1f78_6082292225330358498.gif" alt="Loading">
+    </div>
+
+<div id="parte3">
+
+    <h2>🎵</h2>
+    <p>Essa daqui sempre vai me lembrar você erriessi</p>
+
+    <div class="spotify-player">
+    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/6dBUzqjtbnIa1TwYbyw5CM?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+</div>
+</div>
+
+    <script>
+        // loading
+        window.addEventListener("load", function(){
+            const overlay = document.querySelector(".loading-overlay");
+            overlay.style.opacity = "0";
+            overlay.style.transition = "opacity 1s ease";
+            setTimeout(() => overlay.style.display = "none", 5500);
+        });
+
+        const botao = document.getElementById("next");
+        const parte1 = document.getElementById("parte1");
+        const parte2 = document.getElementById("parte2");
+        let mostrandoSurpresa = false;
+
+        // Mostrar botão ao rolar até o final
+        window.addEventListener("scroll", function() {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+                botao.style.opacity = "1";
+                botao.style.transform = "translateY(0)";
+                botao.style.pointerEvents = "auto";
+            }
+        });
+
+        botao.onclick = function() {
+
+        if (parte1.style.display !== "none") {
+            // Parte1 → Parte2
+            parte1.style.display = "none";
+            parte2.style.display = "flex";
+            parte3.style.display = "none";
+            botao.textContent = "Fechar surpresa ✖";
+
+        } else {
+            // Volta tudo para Parte1
+            parte1.style.display = "flex";
+            parte2.style.display = "none";
+            parte3.style.display = "none";
+            botao.textContent = "Ver surpresa ➜";
+        }
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+        
+        // FUNÇÃO SURPRESA
+function showSurprise() {
+    const teAmoTexts = [
+        'TE AMO ❤️', ' FELIZ ANIVERSARIO', '💕 TE AMO', '💗 TE AMO', '💓 TE AMO'
+    ];
+
+    // TE AMO principal
+    const mainTeAmo = document.createElement('div');
+    mainTeAmo.innerHTML = 'TE AMO ❤️';
+    mainTeAmo.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 4rem;
+        font-weight: bold;
+        background: linear-gradient(45deg, #ff0040, #ffd700, #ff0040);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        z-index: 9999;
+        pointer-events: none;
+        animation: te-amo-main 4s ease-out forwards;
+        text-shadow: 0 0 30px rgba(255, 0, 64, 0.8);
+        filter: drop-shadow(0 0 20px rgba(255, 0, 64, 1));
+    `;
+    document.body.appendChild(mainTeAmo);
+    setTimeout(() => mainTeAmo.remove(), 4000);
+
+    // TE AMO flutuantes
+    for (let i = 0; i < 8; i++) {
+        setTimeout(() => {
+            const teAmo = document.createElement('div');
+            const randomText = teAmoTexts[Math.floor(Math.random() * teAmoTexts.length)];
+            teAmo.innerHTML = randomText;
+            teAmo.style.cssText = `
+                position: fixed;
+                left: ${Math.random() * window.innerWidth}px;
+                top: ${Math.random() * window.innerHeight}px;
+                font-size: ${Math.random() * 2 + 1.5}rem;
+                font-weight: bold;
+                color: ${Math.random() > 0.5 ? '#ff0040' : '#ffd700'};
+                z-index: 9998;
+                pointer-events: none;
+                animation: te-amo-float 3s ease-out forwards;
+                text-shadow: 0 0 15px rgba(255, 0, 64, 0.8);
+                filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
+            `;
+            document.body.appendChild(teAmo);
+            setTimeout(() => teAmo.remove(), 3000);
+        }, i * 200);
+    }
+
+    // Chuva de TE AMO pequenos
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            const miniTeAmo = document.createElement('div');
+            miniTeAmo.innerHTML = '💖 TE AMO';
+            miniTeAmo.style.cssText = `
+                position: fixed;
+                left: ${Math.random() * 100}%;
+                top: -50px;
+                font-size: 1.2rem;
+                color: #ff0040;
+                z-index: 9997;
+                pointer-events: none;
+                animation: te-amo-rain ${Math.random() * 3 + 2}s linear forwards;
+                text-shadow: 0 0 10px rgba(255, 0, 64, 0.6);
+            `;
+            document.body.appendChild(miniTeAmo);
+            setTimeout(() => miniTeAmo.remove(), 5000);
+        }, i * 150);
+    }
+
+    createHeartExplosion();
+
+    // Pulso de fundo
+    const pulseOverlay = document.createElement('div');
+    pulseOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 0, 64, 0.1), transparent);
+        z-index: 9996;
+        pointer-events: none;
+        animation: love-pulse 2s ease-in-out;
+    `;
+    document.body.appendChild(pulseOverlay);
+    setTimeout(() => pulseOverlay.remove(), 2000);
+}
+
+function createHeartExplosion() {
+    const hearts = ['❤️','💖','💕','💗','💓','💝','♥️','💘'];
+    for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            const heart = document.createElement('div');
+            heart.className = 'heart-explosion';
+            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+            heart.style.top = Math.random() * window.innerHeight + 'px';
+            heart.style.color = Math.random() > 0.5 ? '#ff0040' : '#ffd700';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+        }, i * 100);
+    }
+}
+
+    function irParaMusica() {
+        parte1.style.display = "none";
+        parte2.style.display = "none";
+        parte3.style.display = "flex";
+        botao.textContent = "Fechar surpresa ✖";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    </script>
+</body>
+</html>
